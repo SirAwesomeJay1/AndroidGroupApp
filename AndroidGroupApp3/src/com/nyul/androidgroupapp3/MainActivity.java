@@ -15,6 +15,7 @@ public class MainActivity extends ParentActivity{
 	protected void onClickButton1(View v) {
 		final String[] items = { "Item1", "Item2", "Item3", "Item4", "Item5" };
 		final SelectionListener listener = dialogueMaker.options("Title", "Message", items);
+		final TextView tV = (TextView) findViewById(R.id.textView1);				
 		
 		Thread t = new Thread(new Runnable() {			
 			@Override
@@ -28,9 +29,13 @@ public class MainActivity extends ParentActivity{
 					}
 				}
 				
-				for(String s : listener.getCheckedOptionsList()){
-					TextView t = (TextView) findViewById(R.id.textView1);
-					t.setText(s);
+				for(final String s : listener.getCheckedOptionsList()){
+					tV.post(new Runnable() {						
+						@Override
+						public void run() {
+							tV.setText(tV.getText() + "\n" + s);							
+						}
+					});
 				}
 			}
 		});
