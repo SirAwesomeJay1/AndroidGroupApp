@@ -2,6 +2,7 @@ package com.nyul.androidgroupapp3;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,5 +51,9 @@ public abstract class ParentActivity extends Activity implements View.OnClickLis
 
 	protected abstract void onClickButton1(View v);
 	protected abstract void onClickButton2(View v);
+	
+	public void log(String message){
+		Log.e(this.toString(), message);
+	}
 
 }
