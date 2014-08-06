@@ -15,36 +15,54 @@ public class MainActivity extends ParentActivity{
 	protected void onClickButton1(View v) {
 		final String[] items = { "Item1", "Item2", "Item3", "Item4", "Item5" };
 		final SelectionListener listener = dialogueMaker.options("Title", "Message", items);
-		final TextView tV = (TextView) findViewById(R.id.textView1);				
 		
-		Thread t = new Thread(new Runnable() {			
-			@Override
-			public void run() {
-				Looper.prepare();
-				while( ! listener.wasOkPressed() ){
-					try {
-						sleep(1000);
-					} catch (InterruptedException e) {
-						log(e.toString());
-					}
-				}
-				
-				for(final String s : listener.getCheckedOptionsList()){
-					tV.post(new Runnable() {						
-						@Override
-						public void run() {
-							tV.setText(tV.getText() + "\n" + s);							
-						}
-					});
-				}
-			}
-		});
-		
+		Thread t = new Thread( new MultiOptionsHandler(listener) );		
 		t.start();
 	}
 	
 	protected void onClickButton2(View v) {
 		dialogueMaker.message("The Title", "The Message");
+	}
+	
+	class SelectedOptionsHandler implements Runnable{
+		private final SelectionListener listener;
+		private final TextView tV = (TextView) findViewById(R.id.textView1);
+		
+		public SelectedOptionsHandler(SelectionListener listener) {
+			this.listener = listener;
+		}
+
+		@Override
+		public void run() {
+			for(final String s : listener.getCheckedOptionsList()){			
+				tV.setText(tV.getText() + "\n" + s);
+			}
+		}
+		
+	}
+	
+	class MultiOptionsHandler implements Runnable{
+		private final SelectionListener listener;
+		private final TextView tV = (TextView) findViewById(R.id.textView1);				
+		
+		public MultiOptionsHandler(SelectionListener listener) {
+			this.listener = listener; 
+		}
+
+		@Override
+		public void run() {
+			Looper.prepare();
+			while( ! listener.wasOkPressed() ){
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					log(e.toString());
+				}
+			}
+			
+			tV.post(new SelectedOptionsHandler(listener));			
+		}
+		
 	}
 
 }
