@@ -1,8 +1,12 @@
 package com.nyul.androidgroupapp3;
 
 import static java.lang.Thread.sleep;
+
+import java.util.Locale;
+
 import android.os.Looper;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nyul.androidgroupapp3.dialogue.DialogueMaker;
@@ -13,20 +17,38 @@ public class MainActivity extends ParentActivity{
 	DialogueMaker dialogueMaker = new DialogueMaker(this);	
 	
 	protected void onClickButton1(View v) {
-		final String[] items = { "Item1", "Item2", "Item3", "Item4", "Item5" };
-		final SelectionListener listener = dialogueMaker.options("Title", "Message", items);
-		
-		Thread t = new Thread( new MultiOptionsHandler(listener) );		
-		t.start();
+		EditText editText = (EditText) findViewById(R.id.editText1);
+
+		String message = editText.getText().toString();
+		editText.setText(encrypt(message));
 	}
 	
 	protected void onClickButton2(View v) {
-		dialogueMaker.message("The Title", "The Message");
+		EditText editText = (EditText) findViewById(R.id.editText1);
+
+		String message = editText.getText().toString();
+		editText.setText(encrypt2(message));
+
 	}
 	
-	class SelectedOptionsHandler implements Runnable{
+	@Override
+	protected void onClickButton3(View v) {
+		EditText editText = (EditText) findViewById(R.id.editText1);
+
+		String message = editText.getText().toString();
+		editText.setText(decrypt(message));
+
+	}
+protected void onClickButton4(View v) {
+	EditText editText = (EditText) findViewById(R.id.editText1);
+
+	String message = editText.getText().toString();
+	editText.setText(decrypt2(message));
+	}
+	
+class SelectedOptionsHandler implements Runnable{
 		private final SelectionListener listener;
-		private final TextView tV = (TextView) findViewById(R.id.textView1);
+		private final TextView tV = (TextView) findViewById(R.id.editText1);
 		
 		public SelectedOptionsHandler(SelectionListener listener) {
 			this.listener = listener;
@@ -34,8 +56,8 @@ public class MainActivity extends ParentActivity{
 
 		@Override
 		public void run() {
-			for(final String s : listener.getCheckedOptionsList()){			
-				tV.setText(tV.getText() + "\n" + s);
+			for(int i = 0; i < 3; i++){			
+				tV.setText("PIE" + tV.getText() + i);
 			}
 		}
 		
@@ -43,7 +65,7 @@ public class MainActivity extends ParentActivity{
 	
 	class MultiOptionsHandler implements Runnable{
 		private final SelectionListener listener;
-		private final TextView tV = (TextView) findViewById(R.id.textView1);				
+		private final TextView tV = (TextView) findViewById(R.id.editText1);				
 		
 		public MultiOptionsHandler(SelectionListener listener) {
 			this.listener = listener; 
@@ -64,5 +86,43 @@ public class MainActivity extends ParentActivity{
 		}
 		
 	}
+
+	public static String encrypt(String message) {
+		char[] a = message.toCharArray();
+		
+		for(int i=0; i < a.length; i++){
+			a[i] = (char)( a[i] + 1);
+		}
+		
+		return new String(a);
+	}
+	public static String encrypt2(String message) {
+		char[] a = message.toCharArray();
+		
+		for(int i=0; i < a.length; i++){
+			a[i] = (char)( a[i] + 2);
+		}
+		
+		return new String(a);
+	}
+	public static String decrypt(String message) {
+		char[] a = message.toCharArray();
+		for(int i=0; i < a.length; i++){
+			a[i] = (char)( a[i] - 1);
+		}
+		
+		return new String(a);
+	}
+	public static String decrypt2(String message) {
+		char[] a = message.toCharArray();
+		for(int i=0; i < a.length; i++){
+			a[i] = (char)( a[i] - 2);
+		}
+		
+		return new String(a);
+	}
+
+	
+
 
 }

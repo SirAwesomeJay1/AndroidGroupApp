@@ -21,18 +21,18 @@ public class DialogueMaker {
 		
 		builder.setMessage(message)
 			   .setTitle(title)
-			   .setPositiveButton("Ok", new OkListener());					   
+			   .setPositiveButton("SERIOUSLY IM THE BEST IN THE US", new OkListener());					   
 		
 		AlertDialog dialog = builder.create();
 		dialog.show();		
 	}
 	
-	public SelectionListener options(String title, String message, String ... items){
+	public SelectionListener options(String title, String ... items){
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 		MultiChoiceListener multiChoiceListener = new MultiChoiceListener(items);
 		OkListener okListener = new OkListener();
 		builder.setTitle(title)
-			   .setPositiveButton("Ok", okListener)
+			   .setPositiveButton("PRESS FOR FUN!!!", okListener)
 			   .setMultiChoiceItems(items, null, multiChoiceListener);					   
 		
 		AlertDialog dialog = builder.create();
