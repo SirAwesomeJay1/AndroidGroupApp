@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package com.nyul.androidgroupapp3;
+package com.nyul.androidgroupapp3.daguessingame;
 
 public final class R {
     public static final class attr {
